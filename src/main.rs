@@ -1,6 +1,6 @@
 use std::net::TcpListener;
 
-use zero2prod::{build_router, run};
+use zero2prod::startup::{build_router, run};
 
 #[tokio::main]
 async fn main() {

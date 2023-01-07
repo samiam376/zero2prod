@@ -1,6 +1,6 @@
 use std::net::TcpListener;
 
-use zero2prod::{build_router, run};
+use zero2prod::startup::{build_router, run};
 
 fn spawn_app() -> String {
     let router = build_router();
