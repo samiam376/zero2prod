@@ -1,18 +1,26 @@
-use axum::{response::Html, routing::get, Router};
+use axum::{response::Html, routing::{get, post}, Router, Form};
 use http::StatusCode;
+use serde::Deserialize;
 
 async fn health() -> StatusCode {
     StatusCode::OK
 }
 
-async fn handler() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
+
+#[derive(Deserialize)]
+pub struct FormData {
+    email: String,
+    name: String,
+}
+
+async fn subscribe(form: Form<FormData>) -> StatusCode {
+    StatusCode::OK
 }
 
 pub fn build_router() -> Router {
     Router::new()
-        .route("/", get(handler))
         .route("/health_check", get(health))
+        .route("/subscriptions", post(subscribe))
 }
 
 pub async fn run(router: Router, listener: std::net::TcpListener) {
