@@ -1,5 +1,6 @@
 use std::net::TcpListener;
 
+use secrecy::ExposeSecret;
 use sqlx::postgres::PgPoolOptions;
 use zero2prod::{
     configuration::get_configuration,
@@ -15,7 +16,7 @@ async fn main() {
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(&configuration.database.connection_string())
+        .connect(configuration.database.connection_string().expose_secret())
         .await
         .expect("can't connect to database");
 
