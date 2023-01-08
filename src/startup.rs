@@ -24,10 +24,7 @@ pub fn build_router(connection_pool: PgPool) -> Router {
                 .on_response(DefaultOnResponse::new().include_headers(true)),
         )
         .layer(PropagateRequestIdLayer::new(x_request_id.clone()))
-        .layer(SetRequestIdLayer::new(
-            x_request_id,
-            MakeRequestUuid,
-        ))
+        .layer(SetRequestIdLayer::new(x_request_id, MakeRequestUuid))
         .with_state(connection_pool)
 }
 

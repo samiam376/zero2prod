@@ -21,7 +21,11 @@ async fn main() {
         .expect("can't connect to database");
 
     let router = build_router(pool);
-    let listener = TcpListener::bind("127.0.0.1:8000").expect("failed to bind");
+    let addr = format!(
+        "{}:{}",
+        configuration.application.host, configuration.application.port
+    );
+    let listener = TcpListener::bind(addr).expect("failed to bind");
 
     run(router, listener).await;
 }
