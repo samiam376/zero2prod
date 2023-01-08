@@ -1,8 +1,8 @@
 use axum::{debug_handler, extract::State, Form};
+use chrono::Utc;
 use http::StatusCode;
 use serde::Deserialize;
 use sqlx::PgPool;
-use chrono::Utc;
 use uuid::Uuid;
 
 #[derive(Deserialize)]
@@ -28,10 +28,9 @@ pub async fn subscribe(State(pool): State<PgPool>, form: Form<FormData>) -> Stat
 
     match result {
         Ok(_) => StatusCode::OK,
-        Err(e) =>  {
+        Err(e) => {
             println!("Failed to execute query: {}", e);
             StatusCode::INTERNAL_SERVER_ERROR
         }
-        
     }
 }
