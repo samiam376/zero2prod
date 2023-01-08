@@ -1,10 +1,10 @@
 use std::net::TcpListener;
 
 use sqlx::postgres::PgPoolOptions;
-use tracing_subscriber::EnvFilter;
 use zero2prod::{
     configuration::get_configuration,
-    startup::{build_router, run}, telemetry,
+    startup::{build_router, run},
+    telemetry,
 };
 
 #[tokio::main]
