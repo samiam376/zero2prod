@@ -16,8 +16,7 @@ async fn main() {
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect(configuration.database.connection_string().expose_secret())
-        .await
+        .connect_lazy(configuration.database.connection_string().expose_secret())
         .expect("can't connect to database");
 
     let router = build_router(pool);
