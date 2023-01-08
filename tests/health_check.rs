@@ -1,10 +1,11 @@
 use std::net::TcpListener;
 
+use once_cell::sync::Lazy;
 use sqlx::{postgres::PgPoolOptions, Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 use zero2prod::{
     configuration::{get_configuration, DatabaseSettings},
-    startup::{build_router, run},
+    startup::{build_router, run}, telemetry,
 };
 
 pub struct TestApp {
@@ -32,11 +33,16 @@ pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
     connection_pool
 }
 
+static TRACING: Lazy<()> = Lazy::new(|| {
+    telemetry::initialize("debug".into());
+});
+    
+
 async fn spawn_app() -> TestApp {
+    Lazy::force(&TRACING);
+    
     let mut configuration = get_configuration().expect("Failed to read configuration");
     configuration.database.database_name = Uuid::new_v4().to_string();
-
-    let connection_string = configuration.database.connection_string();
 
     let pool = configure_database(&configuration.database).await;
 

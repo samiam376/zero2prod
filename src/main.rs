@@ -1,13 +1,16 @@
 use std::net::TcpListener;
 
 use sqlx::postgres::PgPoolOptions;
+use tracing_subscriber::EnvFilter;
 use zero2prod::{
     configuration::get_configuration,
-    startup::{build_router, run},
+    startup::{build_router, run}, telemetry,
 };
 
 #[tokio::main]
 async fn main() {
+    telemetry::initialize("info".into());
+
     let configuration = get_configuration().expect("Failed to read configuration.");
 
     let pool = PgPoolOptions::new()
